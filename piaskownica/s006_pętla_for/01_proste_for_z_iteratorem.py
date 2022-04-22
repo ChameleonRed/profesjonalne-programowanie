@@ -19,7 +19,7 @@ for wartość_z_listy in lista_wartości:
 int main()
 {
     std::vector<int> v = {0, 1, 2, 3, 4, 5};
-    for (int n : v) {
+    for (auto n : v) {
         std::cout << n << std::endl;
     }
 }
@@ -46,44 +46,46 @@ print('for z ciągiem znaków')
 for wartość_z_listy in 'lista wartości':
     print(wartość_z_listy)
 
-# To jest odpowiednik:
-# int ciag = "lista wartości";
-#
-# for (int i = 0; i < 10; ++i)
-# {
-#   print(ciag[i]);
-# }
+# Tak wygląda w C++
+
+'''
+#include <iostream>
+#include <string>
+ 
+int main()
+{
+    std::string v = "lista wartości";
+ 
+    for (auto x : v) {
+        std::cout << x << std::endl;
+    }
+}
+'''
 
 print('for z wyrazami')
 
 for wyraz in 'lista wartości'.split():
     print(wyraz)
 
-# To jest odpowiednik, choć bez kodu tnącego na wyrazy.
-#
-# int wyrazy = {"lista", "wartości"};
-#
-# for (int i = 0; i < 10; ++i)
-# {
-#   print(wyrazy[i]);
-# }
-#
-# Ewentualnie np. w nowoczesnym C++.
-#
-# #include <iostream>
-# #include <vector>
-# #include <string>
-#
-# int main()
-# {
-#     std::vector<std::string> v = { "lista", "wartości" };
-#
-#     for (auto n : v) {
-#         std::cout << n << std::endl;
-#     }
-# }
+# Tak wygląda w C++.
+
+'''
+#include <iostream>
+#include <vector>
+#include <string>
+
+int main()
+{
+    std::vector<std::string> v = { "lista", "wartości" };
+
+    for (auto n : v) {
+        std::cout << n << std::endl;
+    }
+}
+'''
 
 print('for z generatorem')
+
 
 def generator():
     for wyraz in 'to jest generator'.split():
