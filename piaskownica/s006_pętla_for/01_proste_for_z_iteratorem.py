@@ -84,14 +84,4 @@ int main()
 }
 '''
 
-print('for z generatorem')
-
-
-def generator():
-    for wyraz in 'to jest generator'.split():
-        yield wyraz
-
-
-for wyraz in generator():
-    print(wyraz)
 
