@@ -8,7 +8,7 @@ for wyraz in generator():
 
 # Generatory:
 # - są wolniejsze od list
-# - lepiej przetwarzają poteżne ilości danych (nie zużywają pamięci)
+# - lepiej przetwarzają potężne ilości danych (nie zużywają pamięci)
 # - potrafią przetwarzać zbiory nieskończone (kolejki zdarzeń)
 # - dają wyniki od razu po pierwszym yield
 # - można go przejrzeć tylko raz
