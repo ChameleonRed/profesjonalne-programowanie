@@ -1,34 +1,60 @@
-# for w Pythonie jest bardziej ekspresywne niż w Java, C/C++, C#
-# for działa na dowolnych iteratorach (coś co zwraca kolejne wartości)
-# iteratorem może być ciąg znaków, krotka, lista, zbiór, słownik, generator, wyrażenie iteracyjne, obiekt, ...
+"""
+for w Pythonie jest bardziej ekspresywne niż w Java, C/C++, C#
+for działa na dowolnych iteratorach (coś co zwraca kolejne wartości)
+iteratorem może być ciąg znaków, krotka, lista, zbiór, słownik, generator, wyrażenie iteracyjne, obiekt, ...
 
-print('for z zasięgiem (0, koniec)')
-for i in range(10):
-    print(i)
+for z zasięgiem (0, koniec)
+---------------------------
 
-# Wynik powyżej odpowiada:
-# for (int i = 0; i < 10; ++i)
-# {
-#   print(i);
-# }
-#
-# Indeksowanie jest sztuczne w Python.
-# Iterowanie jest naturalne w Python.
+>>> for i in range(3):
+...     print(i)
+0
+1
+2
 
-print('for z zasięgiem (początek, koniec)')
-for i in range(2, 10):
-    print(i)
+Odpowiednik pseudo Java/C++:
+for (int i = 0; i < 10; ++i)
+{
+  print(i);
+}
 
-# początek = 2
-# koniec = 10 (bez 10)
-#
-# wynik powyżej odpowiada
-# for (int i = 2; i < 10; ++i)
-# {
-#   print(i);
-# }
+Indeksowanie jest sztuczne w Python.
+Iterowanie jest naturalne w Python.
 
+for z zasięgiem (początek, koniec)
+__________________________________
 
-print('for z zasięgiem (początek, koniec, skok)')
-for i in range(2, 10, 2):
-    print(i)
+>>> for i in range(2, 5):
+...     print(i)
+2
+3
+4
+
+początek = 2
+koniec = 10 (bez 10)
+
+Odpowiednik pseudo Java/C++:
+for (int i = 2; i < 10; ++i)
+{
+  print(i);
+}
+
+for z zasięgiem (początek, koniec, skok)
+________________________________________
+
+>>> for i in range(2, 6, 2):
+...     print(i)
+2
+4
+
+Odpowiednik pseudo Java/C++:
+for (int i = 2; i < 6; i += 2)
+{
+  print(i);
+}
+
+"""
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

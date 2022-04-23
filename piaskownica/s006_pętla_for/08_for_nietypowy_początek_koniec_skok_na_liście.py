@@ -1,31 +1,50 @@
-print('for ze skakaniem')
-wejście = [0, 1, 2, 3, 4, 5]
-wyjście = []
-for x in wejście[1:4:2]:
-    wyjście.append(x)
-print(wyjście)
+"""
+for ze skakaniem
+================
 
-# początek 1 element listy
-# koniec 4 (bez tego elementu)
-# skok 2
+for ze skakaniem do przodu
+--------------------------
 
-print('for ze skakaniem od tyłu')
-wejście = [0, 1, 2, 3, 4, 5]
-wyjście = []
-for x in wejście[-1:-4:-2]:
-    wyjście.append(x)
-print(wyjście)
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = []
+>>> for x in wejście[1:4:2]:
+...     wyjście.append(x)
+>>> print(wyjście)
+[1, 3]
 
-# początek -1 ostatni element listy
-# koniec -4 (bez tego elementu)
-# skok -2 (w drugą stronę)
+początek 1 element listy
+koniec 4 (bez tego elementu)
+skok 2
 
-print('for ze wycinek')
-wejście = [0, 1, 2, 3, 4, 5]
-wyjście = []
-for x in wejście[1:4]:
-    wyjście.append(x)
-print(wyjście)
+for ze skakaniem od tyłu
+------------------------
 
-# początek 1 element listy
-# koniec 4 (bez tego elementu)
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = []
+>>> for x in wejście[-1:-4:-2]:
+...     wyjście.append(x)
+>>> print(wyjście)
+[5, 3]
+
+początek -1 ostatni element listy
+koniec -4 (bez tego elementu)
+skok -2 (w drugą stronę)
+
+for z wycinka
+-------------
+
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = []
+>>> for x in wejście[1:4]:
+...     wyjście.append(x)
+>>> print(wyjście)
+[1, 2, 3]
+
+początek 1 element listy
+koniec 4 (bez tego elementu)
+
+"""
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
