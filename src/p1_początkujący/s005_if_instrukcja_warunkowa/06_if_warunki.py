@@ -88,13 +88,13 @@ True
 Żaden na liście
 ---------------
 
->>> bool(all(x != 0 for x in [1, 2, 3]))
+>>> bool(any(x != 0 for x in [1, 2, 3]))
 True
 
 Żaden parzysty na liście
 ------------------------
 
->>> bool(all(x != 0 for x in [1, 2, 3] if x % 2 == 0))
+>>> bool(any(x != 0 for x in [1, 2, 3] if x % 2 == 0))
 True
 
 Podzielny przez 3
