@@ -14,12 +14,14 @@ if else
 ...
 True
 
+Warunek jest wyliczany przez funkcję bool(value).
+
 Odpowiednik:
 
 if (1) {
-  print(1)
+  print(1);
 else {
-   print(0)
+   print(0);
 }
 
 if elif else
@@ -40,16 +42,20 @@ a
 Odpowiednik:
 
 if (value == "a") {
-  print("a")
+  print("a");
 else if (value == "b") {
-   print("b")
+   print("b");
 else if (value == "c") {
-   print("b")
+   print("b");
 }
 else {
-  print('Nieoczekiwana wartość lub inna.')
+  print('Nieoczekiwana wartość lub inna.');
 }
 
 Wygląda to na odpowiednik switch.
 switch można kodować inaczej, szybciej i lepiej.
 """
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

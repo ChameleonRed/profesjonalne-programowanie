@@ -71,6 +71,14 @@ Liczba elementów na liście
 >>> bool(len([0]) == 1)
 True
 
+Wartość elementu na liście
+--------------------------
+
+>>> x = [1, 2, 3]
+>>> y = [2, 3, 4]
+>>> x[1] == y[0]
+True
+
 Wszystkie na liście
 -------------------
 
@@ -219,6 +227,38 @@ Stałe mają ten sam adres
 >>> id('a') == id('a')
 True
 
+Obiekty ciągów znaków incjowane tymi sami stałymi
+-------------------------------------------------
+
+>>> x = str('a')
+>>> y = str('a')
+>>> id(x) == id(y)
+True
+
+Obiekty ciągów znaków incjowane tymi sami stałymi
+-------------------------------------------------
+
+>>> x = str('') + 'a'
+>>> y = str('') + 'a'
+>>> id(x) == id(y)
+True
+
+Obiekty ciągów znaków zmodyfikowane
+-----------------------------------
+
+>>> x = str('a') + 'a'
+>>> y = str('a') + 'a'
+>>> id(x) == id(y)
+False
+
+Obiekty mają różny adres
+------------------------
+
+>>> x = object()
+>>> y = object()
+>>> id(x) == id(y)
+False
+
 Liczby urojone są takie same
 ----------------------------
 
@@ -226,3 +266,7 @@ Liczby urojone są takie same
 True
 
 """
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

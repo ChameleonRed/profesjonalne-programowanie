@@ -9,3 +9,7 @@ if (x is True
 
 # Lepiej takie warunki rozbijać dla czytelności.
 # Nie zawsze trzeba się tego trzymać na sztywno.
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
