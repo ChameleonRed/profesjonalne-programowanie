@@ -11,7 +11,6 @@ if else
 ...     print(True)
 ... else:
 ...     print(False)
-...
 True
 
 Warunek jest wyliczany przez funkcję bool(value).

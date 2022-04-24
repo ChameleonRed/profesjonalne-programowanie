@@ -5,6 +5,7 @@ Wielokrotne if
 >>> if True:
 ...     if True:
 ...         print(True)
+True
 
 Odpowiednik:
 
