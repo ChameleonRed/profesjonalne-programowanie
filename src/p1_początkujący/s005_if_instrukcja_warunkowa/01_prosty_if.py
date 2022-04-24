@@ -43,8 +43,10 @@ Odpowiednik:
 
 if (value == "a") {
   print("a");
+}
 else if (value == "b") {
    print("b");
+}
 else if (value == "c") {
    print("b");
 }
