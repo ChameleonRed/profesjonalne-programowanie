@@ -20,6 +20,7 @@ Odpowiednik:
 
 if (1) {
   print(1);
+}
 else {
    print(0);
 }
@@ -27,17 +28,17 @@ else {
 if elif else
 ------------
 
->>> value = 'a'
+>>> value = 'b'
 >>>
 >>> if value == 'a':
 ...     print('a')
 ... elif value == 'b':
 ...     print('b')
 ... elif value == 'c':
-...     print('b')
+...     print('c')
 ... else:
 ...     print('Nieoczekiwana wartość lub inna.')
-a
+b
 
 Odpowiednik:
 
