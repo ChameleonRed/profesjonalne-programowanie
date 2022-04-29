@@ -1,0 +1,58 @@
+@startmindmap
+
+*_ object
+
+* numeryczne
+**_ int
+**_ float
+**_ complex
+** specjalne
+***_ decimal.Decimal (pieniądze)
+
+* iteratory
+** generatory
+
+** sekwencje
+***_ list
+***_ tuple (stała lista)
+***_ range
+*** tekstowe
+****_ str
+*** bajtowe
+****_ bytes
+****_ memoryview
+
+* zbiory
+**_ set
+**_ frozenset (stały zbiór)
+
+* mapy
+**_ dict
+** specjalne
+***_ collections.defaultdict (inicjowanie)
+***_ collections.OrderedDict (sortowanie)
+***_ collections.Counter (zliczanie)
+
+* kolejka
+**_ collections.dequeue
+
+* referencje
+**_ weakref
+
+* wyrażenia regularne
+**_ re.Pattern
+**_ re.Match
+
+* inne
+**_ collections.namedtuple
+**_ module
+** wywołania
+***_ function
+***_ method
+***_ coroutine
+**_ class
+
+
+
+
+@endmindmap
