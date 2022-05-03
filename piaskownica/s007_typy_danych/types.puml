@@ -3,31 +3,31 @@
 *_ object
 
 * numeryczne
-**_ int
-**_ float
+**_ **int**
+**_ **float**
 **_ complex
-** specjalne
+** dziesiętne
 ***_ decimal.Decimal (pieniądze)
 
 * iteratory
 ** generatory
 
 ** sekwencje
-***_ list
-***_ tuple (stała lista)
-***_ range
+***_ **list**
+***_ **tuple** (stała lista)
+***_ **range**
 *** tekstowe
-****_ str
+****_ **str**
 *** bajtowe
-****_ bytes
+****_ **bytes**
 ****_ memoryview
 
 * zbiory
-**_ set
-**_ frozenset (stały zbiór)
+**_ **set**
+**_ **frozenset** (stały zbiór)
 
 * mapy
-**_ dict
+**_ **dict**
 ** specjalne
 ***_ collections.defaultdict (inicjowanie)
 ***_ collections.OrderedDict (sortowanie)
