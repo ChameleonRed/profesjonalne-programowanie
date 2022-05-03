@@ -8,6 +8,7 @@ Iteratorem może być: ciąg znaków, krotka, lista, zbiór, słownik, generator
 Iterowanie w for jest naturalne w Python-ie.
 Indeksowanie w for jest sztuczne w Python-ie.
 
+
 for z listą
 -----------
 
@@ -46,6 +47,7 @@ class Main {
     }
 }
 
+
 for z ciągiem znaków
 --------------------
 
@@ -69,6 +71,7 @@ int main()
         std::wcout << x << std::endl;
     }
 }
+
 
 for z wyrazami
 --------------

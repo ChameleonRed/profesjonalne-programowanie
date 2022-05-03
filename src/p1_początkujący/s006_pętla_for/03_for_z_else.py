@@ -5,6 +5,7 @@ for z else
 for z else jest Python-owym idiomem.
 Użycie jest rzadkie, ale upraszcza kod.
 
+
 for z else i break
 ------------------
 
@@ -14,6 +15,7 @@ for z else i break
 ...     print('Never printed if break.')
 
 # Nie trzeba definiować flagi przy break jest else.
+
 
 for z else bez break
 --------------------

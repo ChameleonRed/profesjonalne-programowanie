@@ -33,6 +33,34 @@ Wielokrotne for
 4 + 5 = 9
 4 + 6 = 10
 
+
+Złożone skoki
+-------------
+
+>>> break_kostka_4 = False
+>>> for kostka_4 in rzuty_kostką_4:
+...     for kostka_6 in rzuty_kostką_6:
+...         print(f'{kostka_4} + {kostka_6} = {kostka_4 + kostka_6}')
+...         if kostka_4 + kostka_6 > 7:
+...             # flaga wyjścia z zewnętrznej pętli
+...             break_kostka_4 = True
+...             # wyjście z wewnętrzne pętli
+...             break
+...     if break_kostka_4:
+...         break
+1 + 1 = 2
+1 + 2 = 3
+1 + 3 = 4
+1 + 4 = 5
+1 + 5 = 6
+1 + 6 = 7
+2 + 1 = 3
+2 + 2 = 4
+2 + 3 = 5
+2 + 4 = 6
+2 + 5 = 7
+2 + 6 = 8
+
 """
 
 if __name__ == '__main__':

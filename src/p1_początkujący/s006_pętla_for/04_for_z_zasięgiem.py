@@ -3,6 +3,7 @@ for w Pythonie jest bardziej ekspresywne niż w Java, C/C++, C#
 for działa na dowolnych iteratorach (coś co zwraca kolejne wartości)
 iteratorem może być ciąg znaków, krotka, lista, zbiór, słownik, generator, wyrażenie iteracyjne, obiekt, ...
 
+
 for z zasięgiem (0, koniec)
 ---------------------------
 
@@ -21,6 +22,7 @@ for (int i = 0; i < 10; ++i)
 Indeksowanie jest sztuczne w Python.
 Iterowanie jest naturalne w Python.
 
+
 for z zasięgiem (początek, koniec)
 __________________________________
 
@@ -38,6 +40,7 @@ for (int i = 2; i < 10; ++i)
 {
   print(i);
 }
+
 
 for z zasięgiem (początek, koniec, skok)
 ________________________________________

@@ -2,6 +2,7 @@
 for ze skakaniem
 ================
 
+
 for ze skakaniem do przodu
 --------------------------
 
@@ -16,6 +17,7 @@ początek 1 element listy
 koniec 4 (bez tego elementu)
 skok 2
 
+
 for ze skakaniem od tyłu
 ------------------------
 
@@ -29,6 +31,7 @@ for ze skakaniem od tyłu
 początek -1 ostatni element listy
 koniec -4 (bez tego elementu)
 skok -2 (w drugą stronę)
+
 
 for z wycinka
 -------------

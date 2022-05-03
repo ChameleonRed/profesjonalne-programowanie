@@ -1,4 +1,8 @@
 """
+Szybkie i skrócone for
+======================
+
+
 for wejście i wyjście
 ---------------------
 
@@ -9,7 +13,6 @@ for wejście i wyjście
 >>> print(wyjście)
 [1, 2, 3, 4, 5, 6]
 
-# Krótsza i szybsza wersja.
 
 krótkie for wejście i wyjście
 -----------------------------
@@ -22,6 +25,7 @@ krótkie for wejście i wyjście
 To jest odpowiednik for powyżej.
 Różnicą jest większa ekspresja i szybkość
 
+
 for wejście i wyjście z if
 --------------------------
 
@@ -33,6 +37,7 @@ for wejście i wyjście z if
 >>> print(wyjście)
 [1, 3, 5]
 
+
 krótkie for wejście i wyjście z if
 ----------------------------------
 
@@ -41,7 +46,8 @@ krótkie for wejście i wyjście z if
 >>> print(wyjście)
 [1, 3, 5]
 
-Można zapętlać.
+Wielokrotne skrócone for
+------------------------
 
 >>> kostka_2 = [1, 2]
 >>> kostka_4 = [1, 2, 3, 4]
