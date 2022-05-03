@@ -32,4 +32,22 @@ Alternatywą jest też return.
 3 skończ
 
 
+Można też przez raise choć mniej naturalne.
+
+>>> try:
+...     for x in wejście:
+...         # pomiń parzyste
+...         if x % 2 == 0:
+...             print(f'{x} pomiń')
+...             continue
+...         if x == 3:
+...             print(f'{x} skończ')
+...             raise StopIteration()
+... except StopIteration:
+...     pass
+0 pomiń
+2 pomiń
+3 skończ
+
+
 """

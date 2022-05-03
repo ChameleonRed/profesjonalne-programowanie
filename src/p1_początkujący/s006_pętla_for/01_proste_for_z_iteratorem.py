@@ -95,6 +95,57 @@ int main()
         std::cout << wyraz << std::endl;
     }
 }
+
+
+Wzorzec akumulator
+------------------
+
+>>> wartości = [1, 2, 3, 4]
+>>> akumulator = 0
+>>> for x in wartości:
+...     akumulator += x
+
+>>> akumulator
+10
+
+Wzorzec nie jest poprawny, bo:
+
+>>> sum(wartości)
+10
+
+
+Wzorzec min i max
+-----------------
+
+>>> wartości = [1, 2, 3, 4]
+>>> najmniejsza = wartości[0] if wartości else None
+>>> największa = wartości[0] if wartości else None
+>>> for x in wartości[1:]:
+...     if x > największa:
+...         największa = x
+...     if x < najmniejsza:
+...         najmniejsza = x
+
+>>> najmniejsza
+1
+
+>>> największa
+4
+
+Wzorzec nie jest poprawny, bo:
+
+>>> min(wartości)
+1
+
+>>> max(wartości)
+4
+
+Podobnie jest ze średnią, bo:
+
+>>> sum(wartości) / len(wartości)
+2.5
+
+
 """
 
 if __name__ == '__main__':

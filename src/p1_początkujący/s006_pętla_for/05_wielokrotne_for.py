@@ -61,6 +61,7 @@ Złożone skoki
 2 + 5 = 7
 2 + 6 = 8
 
+Można też użyć return lub raise.
 """
 
 if __name__ == '__main__':
