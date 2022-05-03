@@ -1,8 +1,6 @@
 """
-for w Pythonie jest bardziej ekspresywne niż w Java, C/C++, C#
-for działa na dowolnych iteratorach (coś co zwraca kolejne wartości)
-iteratorem może być ciąg znaków, krotka, lista, zbiór, słownik, generator, wyrażenie iteracyjne, obiekt, ...
-
+for z zasięgami
+===============
 
 for z zasięgiem (0, koniec)
 ---------------------------
