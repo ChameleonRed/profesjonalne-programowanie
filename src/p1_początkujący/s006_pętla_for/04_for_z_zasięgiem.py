@@ -17,9 +17,6 @@ for (int i = 0; i < 10; ++i)
   print(i);
 }
 
-Indeksowanie jest sztuczne w Python.
-Iterowanie jest naturalne w Python.
-
 
 for z zasięgiem (początek, koniec)
 __________________________________
