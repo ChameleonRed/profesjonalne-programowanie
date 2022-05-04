@@ -61,7 +61,20 @@ Złożone skoki
 2 + 5 = 7
 2 + 6 = 8
 
-Można też użyć return lub raise.
+
+Skok z raise
+------------
+
+>>> try:
+...     for kostka_4 in rzuty_kostką_4:
+...         for kostka_6 in rzuty_kostką_6:
+...             print(f'{kostka_4} + {kostka_6} = {kostka_4 + kostka_6}')
+...             if kostka_4 + kostka_6 > 7:
+...                 raise StopIteration
+... except StopIteration:
+...     pass
+
+Można też użyć return, jeśli chcemy wyjść z pętli i funkcji.
 """
 
 if __name__ == '__main__':

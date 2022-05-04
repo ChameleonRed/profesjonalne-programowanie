@@ -32,7 +32,7 @@ Alternatywą jest też return.
 3 skończ
 
 
-Można też przez raise choć mniej naturalne.
+Można też przez raise, choć mniej naturalnie.
 
 >>> try:
 ...     for x in wejście:
