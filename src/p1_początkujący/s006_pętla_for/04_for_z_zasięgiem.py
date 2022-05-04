@@ -12,7 +12,7 @@ for z zasięgiem (0, koniec)
 2
 
 Odpowiednik pseudo Java/C++:
-for (int i = 0; i < 10; ++i)
+for (int i = 0; i < 3; ++i)
 {
   print(i);
 }
@@ -31,7 +31,7 @@ początek = 2
 koniec = 10 (bez 10)
 
 Odpowiednik pseudo Java/C++:
-for (int i = 2; i < 10; ++i)
+for (int i = 2; i < 5; ++i)
 {
   print(i);
 }
