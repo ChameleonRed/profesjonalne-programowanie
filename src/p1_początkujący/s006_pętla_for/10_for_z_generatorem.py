@@ -22,7 +22,7 @@ Generatory:
 
 >>> generator_skrócony = (wyraz for wyraz in 'to jest generator'.split())
 
->>> for wyraz in generator():
+>>> for wyraz in generator_skrócony:
 ...    print(wyraz)
 to
 jest
