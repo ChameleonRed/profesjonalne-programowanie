@@ -27,9 +27,6 @@ __________________________________
 3
 4
 
-początek = 2
-koniec = 10 (bez 10)
-
 Odpowiednik pseudo Java/C++:
 for (int i = 2; i < 5; ++i)
 {
