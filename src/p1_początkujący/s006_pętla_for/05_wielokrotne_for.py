@@ -70,7 +70,7 @@ Skok z raise
 ...         for kostka_6 in rzuty_kostką_6:
 ...             print(f'{kostka_4} + {kostka_6} = {kostka_4 + kostka_6}')
 ...             if kostka_4 + kostka_6 > 7:
-...                 raise StopIteration
+...                 raise StopIteration()
 ... except StopIteration:
 ...     pass
 
