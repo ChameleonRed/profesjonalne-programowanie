@@ -3,27 +3,61 @@ Szybkie i skrócone for
 ======================
 
 
-for wejście i wyjście
----------------------
+krótkie for dla list
+--------------------
 
->>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wejście = [0, 1, 2, 3, 4]
 >>> wyjście = []
 >>> for x in wejście:
 ...     wyjście.append(x + 1)
 >>> print(wyjście)
-[1, 2, 3, 4, 5, 6]
-
-
-krótkie for wejście i wyjście
------------------------------
-
->>> wejście = [0, 1, 2, 3, 4, 5]
->>> wyjście = [x + 1 for x in wejście]
->>> print(wyjście)
-[1, 2, 3, 4, 5, 6]
+[1, 2, 3, 4, 5]
 
 To jest odpowiednik for powyżej.
-Różnicą jest większa ekspresja i szybkość
+Różnicą jest większa ekspresja i szybkość.
+
+>>> wejście = [0, 1, 2, 3, 4]
+>>> wyjście = [x + 1 for x in wejście]
+>>> print(wyjście)
+[1, 2, 3, 4, 5]
+
+
+Krótkie for dla słownika
+------------------------
+
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = {}
+>>> for x in wejście:
+...     wyjście[x] = x + 1
+>>> print(wyjście)
+{0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6}
+
+To jest odpowiednik for powyżej.
+Różnicą jest większa ekspresja i szybkość.
+
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = {x: x + 1 for x in wejście}
+>>> print(wyjście)
+{0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6}
+
+
+Krótkie for dla zbioru
+------------------------
+
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = set()
+>>> for x in wejście:
+...     wyjście.add(x + 1)
+>>> print(wyjście)
+{1, 2, 3, 4, 5, 6}
+
+To jest odpowiednik for powyżej.
+Różnicą jest większa ekspresja i szybkość.
+
+>>> wejście = [0, 1, 2, 3, 4, 5]
+>>> wyjście = {x + 1 for x in wejście}
+>>> print(wyjście)
+{1, 2, 3, 4, 5, 6}
 
 
 for wejście i wyjście z if
@@ -68,6 +102,7 @@ Wielokrotne skrócone for
 Zapisy są równoważne.
 Klasyczny jest czytelniejszy.
 Skrócony nieco szybszy.
+
 
 Sprawdź co jest szybsze.
 
