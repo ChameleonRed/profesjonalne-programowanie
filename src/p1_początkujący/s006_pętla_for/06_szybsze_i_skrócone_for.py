@@ -60,6 +60,26 @@ Różnicą jest większa ekspresja i szybkość.
 {1, 2, 3, 4, 5, 6}
 
 
+krótkie for dla generator
+-------------------------
+
+>>> wejście = [0, 1, 2, 3, 4]
+>>> wyjście = []
+>>> def generator():
+...     for x in wejście:
+...         yield x + 1
+>>> print(sum(generator()))
+15
+
+To jest odpowiednik for powyżej.
+Różnicą jest większa ekspresja i szybkość.
+
+>>> wejście = [0, 1, 2, 3, 4]
+>>> generator = (x + 1 for x in wejście)
+>>> print(sum(generator))
+15
+
+
 for wejście i wyjście z if
 --------------------------
 
