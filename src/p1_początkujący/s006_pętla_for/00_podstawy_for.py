@@ -1,6 +1,9 @@
 lista_wartości = [0, 1, 2, 3, 4]
 
 for wartość in lista_wartości:
+    print(wartość)
+
+for wartość in lista_wartości:
     # drukuj parzyste
     if wartość % 2 == 0:
         print(f'{wartość} jest parzyste')
@@ -11,5 +14,5 @@ for wartość in lista_wartości:
         break
 
 
-for i in range(5):
-    print(i)
+for wartość in range(5):
+    print(wartość)
