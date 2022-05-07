@@ -1,0 +1,311 @@
+"""
+Gramatyka matematyki.
+
+Około 4,5h projektowanie, programowanie, kodowania, testowanie izabawa.
+Potrenowałem pisanie match/case, tokenizację i parsowanie.
+
+start:
+    wyrażenie
+
+wyrażenie:
+    | dodawanie (('+'|'-') dodawanie)?
+
+dodawanie:
+    | mnożenie (('*'|'-') mnożenie)?
+
+mnożenie:
+    | potęgowanie (('*'|'-') potęgowanie)?
+
+potęgowanie:
+    | atom (('**'|'^') atom)?
+
+atom:
+    | liczba
+    | '(' wyrażenie ')'
+
+"""
+
+import dataclasses
+import logging
+import re
+import sys
+from collections.abc import Generator
+
+
+@dataclasses.dataclass
+class Token:
+    name: str
+    value: str
+
+
+def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
+    for token in re.finditer(
+            r'(?P<int>\d+)'
+            r'|(?P<plus>\+)'
+            r'|(?P<minus>-)'
+            r'|(?P<power>\^|\*\*)'
+            r'|(?P<multiply>\*)'
+            r'|(?P<divide>/)'
+            r'|(?P<begin_parenthesis>\()' 
+            r'|(?P<end_parenthesis>\))'
+            r'|(?P<equal>==)' 
+            r'|(?P<space>\s+)'
+            r'|(?P<unknown>.+?)',
+            input):
+        yield Token(name=token.lastgroup, value=token.group(0))
+
+
+class ObliczeniowyParserBłąd(Exception):
+    pass
+
+
+class ObliczeniowyParser:
+    def __init__(self, tokenizator: Generator[Token, None, None]):
+        self.tokenizator = tokenizator
+        self.stos_stanów = []
+        self.stos_tokenów = []
+        self.stos = []
+
+    def _weź_token(self):
+        logging.debug('_weź_token')
+        try:
+            if self.stos_tokenów:
+                token = self.stos_tokenów.pop()
+            else:
+                token = next(self.tokenizator)
+            logging.debug('token %s', token)
+            self.aktualny_token = token
+            return token
+        except StopIteration:
+            logging.debug('Nie ma więcej tokenów.')
+            return None
+
+    def _zwróć_token(self, token):
+        logging.debug('_zwróć_token')
+        self.stos_tokenów.append(token)
+        logging.debug('token %s', token)
+        logging.debug('stos tokenów %s', self.stos_tokenów)
+
+    def _weź_ze_stosu(self):
+        logging.debug('_weź_ze_stosu')
+        value = self.stos.pop()
+        logging.debug('pobrano %s stos %s', value, self.stos)
+        return value
+
+    def _odłóż_na_stos(self, value):
+        logging.debug('_odłóż_na_stos')
+        self.stos.append(value)
+        logging.debug('włożono %s stos %s', value, self.stos)
+
+    def _początek_stanu(self):
+        stan = sys._getframe(1).f_code.co_name
+        logging.debug('-> %s początek', stan)
+        self.stos_stanów.append(stan)
+        logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
+
+    def _koniec_stanu(self):
+        stan = sys._getframe(1).f_code.co_name
+        logging.debug('<- %s koniec', stan)
+        self.stos_stanów.pop()
+        logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
+
+    def _zrób_atom(self):
+        self._początek_stanu()
+        while True:
+            token = self._weź_token()
+            match token:
+                # spacja
+                case Token(name='space'):
+                    continue
+                # liczba
+                case Token(name='int'):
+                    logging.debug('-' * 60)
+                    logging.debug('atom = %s', token.value)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(int(token.value))
+                    self._koniec_stanu()
+                    return
+                # ( wyrażenie )
+                case Token(name='begin_parenthesis'):
+                    self._zrób_wyrażenie()
+                    while True:
+                        token = self._weź_token()
+                        match token:
+                            # spacja
+                            case Token(name='space'):
+                                continue
+                            # )
+                            case Token(name='end_parenthesis'):
+                                self._koniec_stanu()
+                                return
+                            # nie wiadomo co
+                            case _:
+                                raise ObliczeniowyParserBłąd(token)
+                # koniec
+                case None:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+                # nie wiadomo co
+                case _:
+                    raise ObliczeniowyParserBłąd(token)
+
+    def _zrób_potęgowanie(self):
+        self._początek_stanu()
+        self._zrób_atom()
+        while True:
+            token = self._weź_token()
+            match token:
+                # spacja
+                case Token(name='space'):
+                    continue
+                # *
+                case Token(name='power'):
+                    self._zrób_atom()
+                    b = self._weź_ze_stosu()
+                    a = self._weź_ze_stosu()
+                    c = a ** b
+                    logging.debug('-' * 60)
+                    logging.debug('potęgowanie %s ** %s = %s', a, b, c)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(c)
+                    continue
+                # koniec
+                case None:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+                # coś innego
+                case _:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+
+    def _zrób_mnożenie(self):
+        self._początek_stanu()
+        self._zrób_potęgowanie()
+        while True:
+            token = self._weź_token()
+            match token:
+                # spacja
+                case Token(name='space'):
+                    continue
+                # *
+                case Token(name='multiply'):
+                    self._zrób_potęgowanie()
+                    b = self._weź_ze_stosu()
+                    a = self._weź_ze_stosu()
+                    c = a * b
+                    logging.debug('-' * 60)
+                    logging.debug('mnożenie %s * %s = %s', a, b, c)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(c)
+                    continue
+                # /
+                case Token(name='divide'):
+                    self._zrób_potęgowanie()
+                    b = self._weź_ze_stosu()
+                    a = self._weź_ze_stosu()
+                    c = a / b
+                    logging.debug('-' * 60)
+                    logging.debug('dzielenie %s / %s = %s', a, b, c)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(c)
+                    continue
+                # koniec
+                case None:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+                # coś innego
+                case _:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+
+    def _zrób_dodawanie(self):
+        self._początek_stanu()
+        self._zrób_mnożenie()
+        while True:
+            token = self._weź_token()
+            match token:
+                # spacja
+                case Token(name='space'):
+                    continue
+                # +
+                case Token(name='plus'):
+                    self._zrób_mnożenie()
+                    b = self._weź_ze_stosu()
+                    a = self._weź_ze_stosu()
+                    c = a + b
+                    logging.debug('-' * 60)
+                    logging.debug('dodawanie %s + %s = %s', a, b, c)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(c)
+                    continue
+                # -
+                case Token(name='minus'):
+                    self._zrób_mnożenie()
+                    b = self._weź_ze_stosu()
+                    a = self._weź_ze_stosu()
+                    c = a - b
+                    logging.debug('-' * 60)
+                    logging.debug('odejmowanie %s - %s = %s', a, b, c)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(c)
+                    continue
+                # koniec
+                case None:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+                # coś innego
+                case _:
+                    self._zwróć_token(token)
+                    self._koniec_stanu()
+                    return
+
+    def _zrób_wyrażenie(self):
+        self._początek_stanu()
+        logging.debug('zrób_wyrażenie początek')
+        while True:
+            token = self._weź_token()
+            match token:
+                # spacja
+                case Token(name='space'):
+                    continue
+                # koniec
+                case None:
+                    self._koniec_stanu()
+                    return None
+                # dodawanie
+                case _:
+                    self._zwróć_token(token)
+                    self._zrób_dodawanie()
+                    self._koniec_stanu()
+                    return
+
+    def parsuj(self) -> int | bool | None:
+        self._zrób_wyrażenie()
+        return self._weź_ze_stosu()
+
+
+if __name__ == '__main__':
+    format = '%(relativeCreated)5d | %(levelname).1s | %(message)s'
+    logging.basicConfig(level=logging.DEBUG, format=format)
+
+    wyrażenie = '2 + 8 * 2 * (3 + 4) + (2 + 3) ^ (2 * 3 - 2)'
+    logging.debug('-' * 60)
+    logging.debug('Tokenizuj: %s.', wyrażenie)
+    logging.debug('-' * 60)
+    for x in obliczeniowy_tokenizator(wyrażenie):
+        logging.debug(x)
+
+    logging.debug('-' * 60)
+    logging.debug('Parsuj: %s.', wyrażenie)
+    logging.debug('-' * 60)
+    parser = ObliczeniowyParser(obliczeniowy_tokenizator(wyrażenie))
+    logging.debug('-' * 60)
+    logging.debug('Wynik %s', parser.parsuj())
+    logging.debug('-' * 60)
+
