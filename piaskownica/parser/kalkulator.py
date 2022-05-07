@@ -5,28 +5,31 @@ Około 4,5h projektowanie, programowanie, kodowania, testowanie izabawa.
 Potrenowałem pisanie match/case, tokenizację i parsowanie.
 
 start:
-    wyrażenie
+    wyrażenie spacje?
 
 wyrażenie:
-    | dodawanie (('+'|'-') dodawanie)?
+    | dodawanie (spacje? ('+'|'-') spacje? dodawanie)?
 
 dodawanie:
-    | mnożenie (('*'|'-') mnożenie)?
+    | mnożenie (spacje? ('*'|'-') spacje? mnożenie)?
 
 mnożenie:
-    | potęgowanie (('*'|'-') potęgowanie)?
+    | potęgowanie (spacje? ('*'|'-') spacje? potęgowanie)?
 
 potęgowanie:
-    | atom (('**'|'^') atom)?
+    | atom (spacje? ('**'|'^') spacje? atom)?
 
 atom:
-    | liczba
-    | '(' wyrażenie ')'
+    | spacje? liczba całkowita
+    | spacje? liczba zmiennoprzecinkowa
+    | spacje? '(' spacje? wyrażenie spacje? ')'
+    | spacje? 'log' spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')'
 
 """
 
 import dataclasses
 import logging
+import math
 import re
 import sys
 from collections.abc import Generator
@@ -41,6 +44,8 @@ class Token:
 def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
     for token in re.finditer(
             r'(?P<int>\d+)'
+            r'|(?P<float>(?:\d+\.\d*|\.\d+)(?:[eE][-+]\d+)?|\d+[eE][-+]\d+)'
+            r'|(?P<identifier>\w+)'
             r'|(?P<plus>\+)'
             r'|(?P<minus>-)'
             r'|(?P<power>\^|\*\*)'
@@ -48,7 +53,8 @@ def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
             r'|(?P<divide>/)'
             r'|(?P<begin_parenthesis>\()' 
             r'|(?P<end_parenthesis>\))'
-            r'|(?P<equal>==)' 
+            r'|(?P<equal>==)'
+            r'|(?P<coma>,)'
             r'|(?P<space>\s+)'
             r'|(?P<unknown>.+?)',
             input):
@@ -109,6 +115,21 @@ class ObliczeniowyParser:
         self.stos_stanów.pop()
         logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
 
+    def _zrób_przecinek(self):
+        self._początek_stanu()
+        while True:
+            token = self._weź_token()
+            match token:
+                # ,
+                case Token(name='coma'):
+                    return
+                # spacja
+                case Token(name='space'):
+                    continue
+                # nie wiadomo co
+                case _:
+                    raise ObliczeniowyParserBłąd(token)
+
     def _zrób_atom(self):
         self._początek_stanu()
         while True:
@@ -117,12 +138,20 @@ class ObliczeniowyParser:
                 # spacja
                 case Token(name='space'):
                     continue
-                # liczba
+                # liczba całkowita
                 case Token(name='int'):
                     logging.debug('-' * 60)
                     logging.debug('atom = %s', token.value)
                     logging.debug('-' * 60)
                     self._odłóż_na_stos(int(token.value))
+                    self._koniec_stanu()
+                    return
+                # liczba zmiennoprzecinkowa
+                case Token(name='float'):
+                    logging.debug('-' * 60)
+                    logging.debug('atom = %s', token.value)
+                    logging.debug('-' * 60)
+                    self._odłóż_na_stos(float(token.value))
                     self._koniec_stanu()
                     return
                 # ( wyrażenie )
@@ -131,16 +160,51 @@ class ObliczeniowyParser:
                     while True:
                         token = self._weź_token()
                         match token:
-                            # spacja
-                            case Token(name='space'):
-                                continue
                             # )
                             case Token(name='end_parenthesis'):
                                 self._koniec_stanu()
                                 return
+                            # spacja
+                            case Token(name='space'):
+                                continue
                             # nie wiadomo co
                             case _:
                                 raise ObliczeniowyParserBłąd(token)
+                # function ( value, base )
+                case Token(name='identifier'):
+                    match token.value:
+                        case 'log':
+                            while True:
+                                token = self._weź_token()
+                                match token:
+                                    # (
+                                    case Token(name='begin_parenthesis'):
+                                        self._zrób_wyrażenie()
+                                        self._zrób_przecinek()
+                                        self._zrób_wyrażenie()
+                                        while True:
+                                            token = self._weź_token()
+                                            match token:
+                                                # )
+                                                case Token(name='end_parenthesis'):
+                                                    b = self._weź_ze_stosu()
+                                                    a = self._weź_ze_stosu()
+                                                    c = math.log(a, b)
+                                                    logging.debug('-' * 60)
+                                                    logging.debug('logarytm log(%s, %s) = %s', a, b, c)
+                                                    logging.debug('-' * 60)
+                                                    self._odłóż_na_stos(c)
+                                                    self._koniec_stanu()
+                                                    return
+                                                # spacja
+                                                case Token(name='space'):
+                                                    continue
+                                                # nie wiadomo co
+                                                case _:
+                                                    raise ObliczeniowyParserBłąd(token)
+                                    # spacja
+                                    case Token(name='space'):
+                                        continue
                 # koniec
                 case None:
                     self._zwróć_token(token)
@@ -294,7 +358,7 @@ if __name__ == '__main__':
     format = '%(relativeCreated)5d | %(levelname).1s | %(message)s'
     logging.basicConfig(level=logging.DEBUG, format=format)
 
-    wyrażenie = '2 + 8 * 2 * (3 + 4) + (2 + 3) ^ (2 * 3 - 2)'
+    wyrażenie = '2 + 8 * 2 * (3 + 4) + (2 + 3) ^ (2 * 3 - 2) + log(16, 2)'
     logging.debug('-' * 60)
     logging.debug('Tokenizuj: %s.', wyrażenie)
     logging.debug('-' * 60)
