@@ -20,8 +20,8 @@ potęgowanie:
     | atom (spacje? ('**'|'^') spacje? atom)?
 
 atom:
-    | spacje? liczba całkowita
-    | spacje? liczba zmiennoprzecinkowa
+    | spacje? liczba_całkowita
+    | spacje? liczba_zmiennoprzecinkowa
     | spacje? '(' spacje? wyrażenie spacje? ')'
     | spacje? 'log' spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')'
 
