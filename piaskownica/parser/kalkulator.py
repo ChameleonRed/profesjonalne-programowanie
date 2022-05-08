@@ -37,11 +37,13 @@ from collections.abc import Generator
 
 @dataclasses.dataclass
 class Token:
-    name: str
-    value: str
+    nazwa: str
+    wartość: str
+    pozycja: int
 
 
 def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
+    pozycja = 0
     for token in re.finditer(
             r'(?P<int>\d+)'
             r'|(?P<float>(?:\d+\.\d*|\.\d+)(?:[eE][-+]\d+)?|\d+[eE][-+]\d+)'
@@ -58,7 +60,8 @@ def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
             r'|(?P<space>\s+)'
             r'|(?P<unknown>.+?)',
             input):
-        yield Token(name=token.lastgroup, value=token.group(0))
+        yield Token(nazwa=token.lastgroup, wartość=token.group(0), pozycja=pozycja)
+        pozycja += len(token.group(0))
 
 
 class ObliczeniowyParserBłąd(Exception):
@@ -121,10 +124,10 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # ,
-                case Token(name='coma'):
+                case Token(nazwa='coma'):
                     return
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # nie wiadomo co
                 case _:
@@ -135,7 +138,7 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # (
-                case Token(name='begin_parenthesis'):
+                case Token(nazwa='begin_parenthesis'):
                     self._zrób_wyrażenie()
                     self._zrób_przecinek()
                     self._zrób_wyrażenie()
@@ -143,7 +146,7 @@ class ObliczeniowyParser:
                         token = self._weź_token()
                         match token:
                             # )
-                            case Token(name='end_parenthesis'):
+                            case Token(nazwa='end_parenthesis'):
                                 b = self._weź_ze_stosu()
                                 a = self._weź_ze_stosu()
                                 c = math.log(a, b)
@@ -154,13 +157,13 @@ class ObliczeniowyParser:
                                 self._koniec_stanu()
                                 return
                             # spacja
-                            case Token(name='space'):
+                            case Token(nazwa='space'):
                                 continue
                             # nie wiadomo co
                             case _:
                                 raise ObliczeniowyParserBłąd(token)
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
 
     def _zrób_atom(self):
@@ -169,43 +172,43 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # liczba całkowita
-                case Token(name='int'):
+                case Token(nazwa='int'):
                     logging.debug('-' * 60)
-                    logging.debug('atom = %s', token.value)
+                    logging.debug('atom = %s', token.wartość)
                     logging.debug('-' * 60)
-                    self._odłóż_na_stos(int(token.value))
+                    self._odłóż_na_stos(int(token.wartość))
                     self._koniec_stanu()
                     return
                 # liczba zmiennoprzecinkowa
-                case Token(name='float'):
+                case Token(nazwa='float'):
                     logging.debug('-' * 60)
-                    logging.debug('atom = %s', token.value)
+                    logging.debug('atom = %s', token.wartość)
                     logging.debug('-' * 60)
-                    self._odłóż_na_stos(float(token.value))
+                    self._odłóż_na_stos(float(token.wartość))
                     self._koniec_stanu()
                     return
                 # ( wyrażenie )
-                case Token(name='begin_parenthesis'):
+                case Token(nazwa='begin_parenthesis'):
                     self._zrób_wyrażenie()
                     while True:
                         token = self._weź_token()
                         match token:
                             # )
-                            case Token(name='end_parenthesis'):
+                            case Token(nazwa='end_parenthesis'):
                                 self._koniec_stanu()
                                 return
                             # spacja
-                            case Token(name='space'):
+                            case Token(nazwa='space'):
                                 continue
                             # nie wiadomo co
                             case _:
                                 raise ObliczeniowyParserBłąd(token)
                 # function ( value, base )
-                case Token(name='identifier'):
-                    match token.value:
+                case Token(nazwa='identifier'):
+                    match token.wartość:
                         case 'log':
                             self._zwróć_token(token)
                             self.zrób_logarytm()
@@ -226,10 +229,10 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # *
-                case Token(name='power'):
+                case Token(nazwa='power'):
                     self._zrób_atom()
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
@@ -257,10 +260,10 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # *
-                case Token(name='multiply'):
+                case Token(nazwa='multiply'):
                     self._zrób_potęgowanie()
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
@@ -271,7 +274,7 @@ class ObliczeniowyParser:
                     self._odłóż_na_stos(c)
                     continue
                 # /
-                case Token(name='divide'):
+                case Token(nazwa='divide'):
                     self._zrób_potęgowanie()
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
@@ -299,10 +302,10 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # +
-                case Token(name='plus'):
+                case Token(nazwa='plus'):
                     self._zrób_mnożenie()
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
@@ -313,7 +316,7 @@ class ObliczeniowyParser:
                     self._odłóż_na_stos(c)
                     continue
                 # -
-                case Token(name='minus'):
+                case Token(nazwa='minus'):
                     self._zrób_mnożenie()
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
@@ -341,7 +344,7 @@ class ObliczeniowyParser:
             token = self._weź_token()
             match token:
                 # spacja
-                case Token(name='space'):
+                case Token(nazwa='space'):
                     continue
                 # koniec
                 case None:
