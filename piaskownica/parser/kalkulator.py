@@ -130,6 +130,39 @@ class ObliczeniowyParser:
                 case _:
                     raise ObliczeniowyParserBłąd(token)
 
+    def zrób_logarytm(self):
+        while True:
+            token = self._weź_token()
+            match token:
+                # (
+                case Token(name='begin_parenthesis'):
+                    self._zrób_wyrażenie()
+                    self._zrób_przecinek()
+                    self._zrób_wyrażenie()
+                    while True:
+                        token = self._weź_token()
+                        match token:
+                            # )
+                            case Token(name='end_parenthesis'):
+                                b = self._weź_ze_stosu()
+                                a = self._weź_ze_stosu()
+                                c = math.log(a, b)
+                                logging.debug('-' * 60)
+                                logging.debug('logarytm log(%s, %s) = %s', a, b, c)
+                                logging.debug('-' * 60)
+                                self._odłóż_na_stos(c)
+                                self._koniec_stanu()
+                                return
+                            # spacja
+                            case Token(name='space'):
+                                continue
+                            # nie wiadomo co
+                            case _:
+                                raise ObliczeniowyParserBłąd(token)
+                # spacja
+                case Token(name='space'):
+                    continue
+
     def _zrób_atom(self):
         self._początek_stanu()
         while True:
@@ -174,37 +207,9 @@ class ObliczeniowyParser:
                 case Token(name='identifier'):
                     match token.value:
                         case 'log':
-                            while True:
-                                token = self._weź_token()
-                                match token:
-                                    # (
-                                    case Token(name='begin_parenthesis'):
-                                        self._zrób_wyrażenie()
-                                        self._zrób_przecinek()
-                                        self._zrób_wyrażenie()
-                                        while True:
-                                            token = self._weź_token()
-                                            match token:
-                                                # )
-                                                case Token(name='end_parenthesis'):
-                                                    b = self._weź_ze_stosu()
-                                                    a = self._weź_ze_stosu()
-                                                    c = math.log(a, b)
-                                                    logging.debug('-' * 60)
-                                                    logging.debug('logarytm log(%s, %s) = %s', a, b, c)
-                                                    logging.debug('-' * 60)
-                                                    self._odłóż_na_stos(c)
-                                                    self._koniec_stanu()
-                                                    return
-                                                # spacja
-                                                case Token(name='space'):
-                                                    continue
-                                                # nie wiadomo co
-                                                case _:
-                                                    raise ObliczeniowyParserBłąd(token)
-                                    # spacja
-                                    case Token(name='space'):
-                                        continue
+                            self._zwróć_token(token)
+                            self.zrób_logarytm()
+                            return
                 # koniec
                 case None:
                     self._zwróć_token(token)
