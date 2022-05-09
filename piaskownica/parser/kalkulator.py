@@ -35,7 +35,7 @@ import sys
 from collections.abc import Generator
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class Token:
     nazwa: str
     wartość: str
@@ -377,7 +377,8 @@ if __name__ == '__main__':
     logging.debug('Parsuj: %s.', wyrażenie)
     logging.debug('-' * 60)
     parser = ObliczeniowyParser(obliczeniowy_tokenizator(wyrażenie))
+    wynik = parser.parsuj()
     logging.debug('-' * 60)
-    logging.debug('Wynik %s', parser.parsuj())
+    logging.debug('Wynik %s', wynik)
     logging.debug('-' * 60)
 
