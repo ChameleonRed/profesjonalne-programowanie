@@ -4,20 +4,20 @@ Gramatyka matematyki.
 Około 4,5h projektowanie, programowanie, kodowania, testowanie i zabawa.
 Potrenowałem pisanie match/case, tokenizację i parsowanie.
 
-start:
-    wyrażenie spacje?
-
 wyrażenie:
-    | dodawanie (spacje? ('+'|'-') spacje? dodawanie)?
+    | spacje? dodawanie spacje?
+
+spacje:
+    | spacja+
 
 dodawanie:
-    | mnożenie (spacje? ('*'|'-') spacje? mnożenie)?
+    | mnożenie (spacje? ('+'|'-') spacje? mnożenie)*
 
 mnożenie:
-    | potęgowanie (spacje? ('*'|'-') spacje? potęgowanie)?
+    | potęgowanie (spacje? ('*'|'-') spacje? potęgowanie)*
 
 potęgowanie:
-    | atom (spacje? ('**'|'^') spacje? atom)?
+    | atom (spacje? ('**'|'^') spacje? atom)*
 
 atom:
     | spacje? liczba_całkowita
@@ -42,24 +42,38 @@ class Token:
     pozycja: int
 
 
-def obliczeniowy_tokenizator(input: str) -> Generator[Token, None, None]:
+def obliczeniowy_tokenizator(wyrażenie: str) -> Generator[Token, None, None]:
     pozycja = 0
     for token in re.finditer(
+            # 1 11
             r'(?P<int>\d+)'
+            # 12. 1.01 1.01e-2 .2 .3e+2 1e+1
             r'|(?P<float>(?:\d+\.\d*|\.\d+)(?:[eE][-+]\d+)?|\d+[eE][-+]\d+)'
+            # arcus_sin log
             r'|(?P<identifier>\w+)'
+            # +
             r'|(?P<plus>\+)'
+            # -
             r'|(?P<minus>-)'
+            # ** ^
             r'|(?P<power>\^|\*\*)'
+            # *
             r'|(?P<multiply>\*)'
+            # /
             r'|(?P<divide>/)'
-            r'|(?P<begin_parenthesis>\()' 
+            # (
+            r'|(?P<begin_parenthesis>\()'
+            # )
             r'|(?P<end_parenthesis>\))'
+            # ==
             r'|(?P<equal>==)'
+            # ,
             r'|(?P<coma>,)'
+            #
             r'|(?P<space>\s+)'
+            # error
             r'|(?P<unknown>.+?)',
-            input):
+            wyrażenie):
         yield Token(nazwa=token.lastgroup, wartość=token.group(0), pozycja=pozycja)
         pozycja += len(token.group(0))
 
@@ -339,7 +353,6 @@ class ObliczeniowyParser:
 
     def _zrób_wyrażenie(self):
         self._początek_stanu()
-        logging.debug('zrób_wyrażenie początek')
         while True:
             token = self._weź_token()
             match token:
