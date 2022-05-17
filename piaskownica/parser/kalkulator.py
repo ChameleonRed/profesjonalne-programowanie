@@ -1,7 +1,7 @@
 """
 Gramatyka matematyki.
 
-Około 4,5h projektowanie, programowanie, kodowania, testowanie izabawa.
+Około 4,5h projektowanie, programowanie, kodowania, testowanie i zabawa.
 Potrenowałem pisanie match/case, tokenizację i parsowanie.
 
 start:
