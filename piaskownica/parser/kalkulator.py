@@ -32,7 +32,7 @@ import logging
 import math
 import re
 import sys
-from collections.abc import Generator
+from collections.abc import Generator, Callable
 
 
 @dataclasses.dataclass(slots=True)
@@ -83,8 +83,9 @@ class ObliczeniowyParserBłąd(Exception):
 
 
 class ObliczeniowyParser:
-    def __init__(self, tokenizator: Generator[Token, None, None]):
-        self.tokenizator = tokenizator
+    def __init__(self, funkcja_tokenizatora: Callable[[str], Generator[Token, None, None]], wyrażenie):
+        self.tokenizator = funkcja_tokenizatora(wyrażenie)
+        self.wyrażenie = wyrażenie
         self.stos_stanów = []
         self.stos_tokenów = []
         self.stos = []
@@ -94,8 +95,16 @@ class ObliczeniowyParser:
         try:
             if self.stos_tokenów:
                 token = self.stos_tokenów.pop()
+                if token:
+                    logging.debug(' token ze stosu '.center(60, '─'))
+                    logging.debug(self.wyrażenie)
+                    logging.debug('─' * token.pozycja + '#')
             else:
                 token = next(self.tokenizator)
+                if token:
+                    logging.debug(' token ze tokenizera '.center(60, '─'))
+                    logging.debug(self.wyrażenie)
+                    logging.debug('─' * token.pozycja + '#')
             logging.debug('token %s', token)
             self.aktualny_token = token
             return token
@@ -164,9 +173,9 @@ class ObliczeniowyParser:
                                 b = self._weź_ze_stosu()
                                 a = self._weź_ze_stosu()
                                 c = math.log(a, b)
-                                logging.debug('-' * 60)
+                                logging.debug('─' * 60)
                                 logging.debug('logarytm log(%s, %s) = %s', a, b, c)
-                                logging.debug('-' * 60)
+                                logging.debug('─' * 60)
                                 self._odłóż_na_stos(c)
                                 self._koniec_stanu()
                                 return
@@ -190,17 +199,17 @@ class ObliczeniowyParser:
                     continue
                 # liczba całkowita
                 case Token(nazwa='int'):
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('atom = %s', token.wartość)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(int(token.wartość))
                     self._koniec_stanu()
                     return
                 # liczba zmiennoprzecinkowa
                 case Token(nazwa='float'):
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('atom = %s', token.wartość)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(float(token.wartość))
                     self._koniec_stanu()
                     return
@@ -251,9 +260,9 @@ class ObliczeniowyParser:
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
                     c = a ** b
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('potęgowanie %s ** %s = %s', a, b, c)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(c)
                     continue
                 # koniec
@@ -282,9 +291,9 @@ class ObliczeniowyParser:
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
                     c = a * b
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('mnożenie %s * %s = %s', a, b, c)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(c)
                     continue
                 # /
@@ -293,9 +302,9 @@ class ObliczeniowyParser:
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
                     c = a / b
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('dzielenie %s / %s = %s', a, b, c)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(c)
                     continue
                 # koniec
@@ -324,9 +333,9 @@ class ObliczeniowyParser:
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
                     c = a + b
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('dodawanie %s + %s = %s', a, b, c)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(c)
                     continue
                 # -
@@ -335,9 +344,9 @@ class ObliczeniowyParser:
                     b = self._weź_ze_stosu()
                     a = self._weź_ze_stosu()
                     c = a - b
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     logging.debug('odejmowanie %s - %s = %s', a, b, c)
-                    logging.debug('-' * 60)
+                    logging.debug('─' * 60)
                     self._odłóż_na_stos(c)
                     continue
                 # koniec
@@ -380,18 +389,18 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format=format)
 
     wyrażenie = '2 + 8 * 2 * (3 + 4) + (2 + 3) ^ (2 * 3 - 2) + log(16, 2)'
-    logging.debug('-' * 60)
+    logging.debug('─' * 60)
     logging.debug('Tokenizuj: %s.', wyrażenie)
-    logging.debug('-' * 60)
+    logging.debug('─' * 60)
     for x in obliczeniowy_tokenizator(wyrażenie):
         logging.debug(x)
 
-    logging.debug('-' * 60)
+    logging.debug('─' * 60)
     logging.debug('Parsuj: %s.', wyrażenie)
-    logging.debug('-' * 60)
-    parser = ObliczeniowyParser(obliczeniowy_tokenizator(wyrażenie))
+    logging.debug('─' * 60)
+    parser = ObliczeniowyParser(obliczeniowy_tokenizator, wyrażenie)
     wynik = parser.parsuj()
-    logging.debug('-' * 60)
+    logging.debug('─' * 60)
     logging.debug('Wynik %s', wynik)
-    logging.debug('-' * 60)
+    logging.debug('─' * 60)
 
