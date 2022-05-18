@@ -136,14 +136,14 @@ class ObliczeniowyParser:
 
     def _początek_stanu(self):
         stan = sys._getframe(1).f_code.co_name
-        logging.debug('-> %s początek', stan)
+        logging.debug('>>' + '─' * 2 * len(self.stos_stanów) +' %s początek', stan)
         self.stos_stanów.append(stan)
         logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
 
     def _koniec_stanu(self):
         stan = sys._getframe(1).f_code.co_name
-        logging.debug('<- %s koniec', stan)
         self.stos_stanów.pop()
+        logging.debug('<<' + '─' * 2 * len(self.stos_stanów) + ' %s koniec', stan)
         logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
 
     def _zrób_przecinek(self):
@@ -153,6 +153,7 @@ class ObliczeniowyParser:
             match token:
                 # ,
                 case Token(nazwa='coma'):
+                    self._koniec_stanu()
                     return
                 # spacja
                 case Token(nazwa='space'):
@@ -162,6 +163,7 @@ class ObliczeniowyParser:
                     raise ObliczeniowyParserBłąd(token)
 
     def zrób_logarytm(self):
+        self._początek_stanu()
         while True:
             token = self._weź_token()
             match token:
@@ -240,6 +242,7 @@ class ObliczeniowyParser:
                         case 'log':
                             self._zwróć_token(token)
                             self.zrób_logarytm()
+                            self._koniec_stanu()
                             return
                 # koniec
                 case None:
