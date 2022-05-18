@@ -23,7 +23,10 @@ atom:
     | liczba_całkowita spacje?
     | liczba_zmiennoprzecinkowa spacje?
     | '(' spacje? wyrażenie spacje? ')' spacje?
-    | 'log' spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')' spacje?
+    | funkcja spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')' spacje?
+
+funkcja:
+    | 'log'
 
 """
 
@@ -98,13 +101,15 @@ class ObliczeniowyParser:
                 if token:
                     logging.debug(' token ze stosu '.center(60, '─'))
                     logging.debug(self.wyrażenie)
-                    logging.debug('─' * token.pozycja + '#')
+                    logging.debug(''.join(['─' * (token.pozycja - 1),
+                                           '┤' if token.pozycja else '', token.wartość, '│']))
             else:
                 token = next(self.tokenizator)
                 if token:
                     logging.debug(' token ze tokenizera '.center(60, '─'))
                     logging.debug(self.wyrażenie)
-                    logging.debug('─' * token.pozycja + '#')
+                    logging.debug(''.join(['─' * (token.pozycja - 1),
+                                           '┤' if token.pozycja else '', token.wartość, '│']))
             logging.debug('token %s', token)
             self.aktualny_token = token
             return token
