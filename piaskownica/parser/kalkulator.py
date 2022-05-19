@@ -94,7 +94,7 @@ class ObliczeniowyParser:
         self.stos = []
 
     def _weź_token(self):
-        logging.debug('_weź_token')
+        logging.debug('_weź_token()')
         try:
             if self.stos_tokenów:
                 token = self.stos_tokenów.pop()
@@ -118,33 +118,38 @@ class ObliczeniowyParser:
             return None
 
     def _zwróć_token(self, token):
-        logging.debug('_zwróć_token')
+        logging.debug('_zwróć_token()')
         self.stos_tokenów.append(token)
         logging.debug('token %s', token)
         logging.debug('stos tokenów %s', self.stos_tokenów)
 
     def _weź_ze_stosu(self):
-        logging.debug('_weź_ze_stosu')
+        logging.debug('_weź_ze_stosu()')
         value = self.stos.pop()
         logging.debug('pobrano %s stos %s', value, self.stos)
         return value
 
     def _odłóż_na_stos(self, value):
-        logging.debug('_odłóż_na_stos')
+        logging.debug('_odłóż_na_stos()')
         self.stos.append(value)
         logging.debug('włożono %s stos %s', value, self.stos)
 
     def _początek_stanu(self):
         stan = sys._getframe(1).f_code.co_name
-        logging.debug('>>' + '─' * 2 * len(self.stos_stanów) +' %s początek', stan)
+        logging.debug('')
+        logging.debug('>>' + '═' * 2 * len(self.stos_stanów) +' %s() początek', stan)
         self.stos_stanów.append(stan)
-        logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
+        logging.debug('stos %s stanów: %s', len(self.stos_stanów), ' -> '.join(self.stos_stanów))
 
     def _koniec_stanu(self):
         stan = sys._getframe(1).f_code.co_name
         self.stos_stanów.pop()
-        logging.debug('<<' + '─' * 2 * len(self.stos_stanów) + ' %s koniec', stan)
-        logging.debug('stos stanów: %s', ' -> '.join(self.stos_stanów))
+        logging.debug('stos %s stanów: %s', len(self.stos_stanów), ' -> '.join(self.stos_stanów))
+        logging.debug('<<' + '═' * 2 * len(self.stos_stanów) + ' %s() koniec', stan)
+        logging.debug('')
+        if self.stos_stanów:
+            logging.debug('═' * 2 * len(self.stos_stanów) + ' kontynuuj %s()', self.stos_stanów[-1])
+            logging.debug('')
 
     def _zrób_przecinek(self):
         self._początek_stanu()
