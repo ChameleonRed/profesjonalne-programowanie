@@ -23,10 +23,10 @@ atom:
     | liczba_całkowita spacje?
     | liczba_zmiennoprzecinkowa spacje?
     | '(' spacje? wyrażenie spacje? ')' spacje?
-    | funkcja spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')' spacje?
+    | funkcja
 
 funkcja:
-    | 'log'
+    | 'log' spacje? '('spacje?  wyrażenie spacje? ',' spacje? wyrażenie spacje? ')' spacje?
 
 """
 
