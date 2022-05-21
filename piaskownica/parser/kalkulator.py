@@ -91,7 +91,7 @@ class ObliczeniowyParser:
         self.wyrażenie = wyrażenie
         self.stos_stanów = []
         self.stos_tokenów = []
-        self.stos = []
+        self.stos_wartości = []
 
     def _weź_token(self):
         logging.debug('_weź_token()')
@@ -111,7 +111,6 @@ class ObliczeniowyParser:
                     logging.debug(''.join(['─' * (token.pozycja - 1),
                                            '┤' if token.pozycja else '', token.wartość, '│']))
             logging.debug('token %s', token)
-            self.aktualny_token = token
             return token
         except StopIteration:
             logging.debug('Nie ma więcej tokenów.')
@@ -125,14 +124,14 @@ class ObliczeniowyParser:
 
     def _weź_ze_stosu(self):
         logging.debug('_weź_ze_stosu()')
-        value = self.stos.pop()
-        logging.debug('pobrano %s stos %s', value, self.stos)
+        value = self.stos_wartości.pop()
+        logging.debug('pobrano %s stos %s', value, self.stos_wartości)
         return value
 
     def _odłóż_na_stos(self, value):
         logging.debug('_odłóż_na_stos()')
-        self.stos.append(value)
-        logging.debug('włożono %s stos %s', value, self.stos)
+        self.stos_wartości.append(value)
+        logging.debug('włożono %s stos %s', value, self.stos_wartości)
 
     def _początek_stanu(self):
         stan = sys._getframe(1).f_code.co_name
