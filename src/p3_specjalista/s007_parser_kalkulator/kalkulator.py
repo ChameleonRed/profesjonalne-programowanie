@@ -397,8 +397,8 @@ class ObliczeniowyParser:
 
 
 if __name__ == '__main__':
-    format = '%(relativeCreated)5d | %(levelname).1s | %(message)s'
-    logging.basicConfig(level=logging.DEBUG, format=format)
+    log_format = '%(relativeCreated)5d | %(levelname).1s | %(message)s'
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
 
     wyrażenie = '2 + 8 * 2 * (3 + 4) + (2 + 3) ^ (2 * 3 - 2) + log(16, 2)'
     logging.debug('─' * 60)
