@@ -1,4 +1,4 @@
-from p1_początkujący.s002_szachownica_funkcje import ramki
+from src.p1_początkujący.s002_szachownica_funkcje import ramki
 
 
 def rysuj_górę(rozmiar):
